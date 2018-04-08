@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -ex
+curl http://nand2tetris.org/software/nand2tetris.zip > tools.zip
+unzip tools.zip
+rm tools.zip
+mv nand2tetris/* .
+rm -rf nand2tetris
