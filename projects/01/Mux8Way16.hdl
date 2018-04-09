@@ -18,5 +18,5 @@ CHIP Mux8Way16 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // This is where I decided to move on.
 }
