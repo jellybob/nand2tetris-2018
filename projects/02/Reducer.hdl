@@ -1,0 +1,25 @@
+CHIP Reducer {
+  IN
+    in[16]; /* 16-bit inputs */
+
+  OUT
+    out; /* True if all bits match */
+
+  PARTS:
+    Or(a=in[0], b=false, out=zero);
+    Or(a=in[1], b=zero, out=one);
+    Or(a=in[2], b=one, out=two);
+    Or(a=in[3], b=two, out=three);
+    Or(a=in[4], b=three, out=four);
+    Or(a=in[5], b=four, out=five);
+    Or(a=in[6], b=five, out=six);
+    Or(a=in[7], b=six, out=seven);
+    Or(a=in[8], b=seven, out=eight);
+    Or(a=in[9], b=eight, out=nine);
+    Or(a=in[10], b=nine, out=ten);
+    Or(a=in[11], b=ten, out=eleven);
+    Or(a=in[12], b=eleven, out=twelve);
+    Or(a=in[13], b=twelve, out=thirteen);
+    Or(a=in[14], b=thirteen, out=fourteen);
+    Or(a=in[15], b=fourteen, out=out);
+}
