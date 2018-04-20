@@ -23,4 +23,42 @@ CHIP RAM64 {
     - address[3..5] is routed to each RAM8 to select which register.
     - Otherwise just like a RAM8.
     */
+
+    /* Send the load input to the selected address */
+    DMux8Way(
+      in=load,
+      sel=address[0..2],
+      a=loadOne,
+      b=loadTwo,
+      c=loadThree,
+      d=loadFour,
+      e=loadFive,
+      f=loadSix,
+      g=loadSeven,
+      h=loadEight
+    );
+
+    /* Send the selected address to the output */
+    Mux8Way16(
+      a=one,
+      b=two,
+      c=three,
+      d=four,
+      e=five,
+      f=six,
+      g=seven,
+      h=eight,
+      sel=address[0..2],
+      out=out
+    );
+
+    /* Memory registers */
+    RAM8(in=in, load=loadOne, address=address[3..5], out=one);
+    RAM8(in=in, load=loadTwo, address=address[3..5], out=two);
+    RAM8(in=in, load=loadThree, address=address[3..5], out=three);
+    RAM8(in=in, load=loadFour, address=address[3..5], out=four);
+    RAM8(in=in, load=loadFive, address=address[3..5], out=five);
+    RAM8(in=in, load=loadSix, address=address[3..5], out=six);
+    RAM8(in=in, load=loadSeven, address=address[3..5], out=seven);
+    RAM8(in=in, load=loadEight, address=address[3..5], out=eight);
 }
