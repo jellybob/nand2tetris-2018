@@ -15,5 +15,42 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+    /* Send the load input to the selected address */
+    DMux8Way(
+      in=load,
+      sel=address,
+      a=loadOne,
+      b=loadTwo,
+      c=loadThree,
+      d=loadFour,
+      e=loadFive,
+      f=loadSix,
+      g=loadSeven,
+      h=loadEight
+    );
+
+    /* Send the selected address to the output */
+    Mux8Way16(
+      a=one,
+      b=two,
+      c=three,
+      d=four,
+      e=five,
+      f=six,
+      g=seven,
+      h=eight,
+      sel=address,
+      out=out
+    );
+
+    /* Memory registers */
+    Register(in=in, load=loadOne, out=one);
+    Register(in=in, load=loadTwo, out=two);
+    Register(in=in, load=loadThree, out=three);
+    Register(in=in, load=loadFour, out=four);
+    Register(in=in, load=loadFive, out=five);
+    Register(in=in, load=loadSix, out=six);
+    Register(in=in, load=loadSeven, out=seven);
+    Register(in=in, load=loadEight, out=eight);
 }
