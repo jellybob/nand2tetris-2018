@@ -44,4 +44,40 @@ CHIP ALU {
         ng; /* 1 if (out < 0),  0 otherwise */
 
     PARTS:
+      Fanout(in=false, out=allFalse);
+      Fanout(in=true, out=allTrue);
+
+      /* Input zeroing */
+      Mux16(a=x,
+            sel=zx,
+            out=xinOrZero,
+            b=allFalse);
+      Mux16(a=y,
+            sel=zy,
+            out=yinOrZero,
+            b=allFalse);
+
+      /* Input negation */
+      Not16(in=xinOrZero, out=notXin);
+      Not16(in=yinOrZero, out=notYin);
+      Mux16(a=xinOrZero, b=notXin, sel=nx, out=xin);
+      Mux16(a=yinOrZero, b=notYin, sel=ny, out=yin);
+
+      /* Function selection */
+      Add16(a=xin, b=yin, out=addInputs);
+      And16(a=xin, b=yin, out=andInputs);
+      Mux16(a=andInputs, b=addInputs, sel=f, out=result);
+
+      /* Output negation */
+      Not16(in=result, out=notResult);
+      Mux16(a=result, b=notResult, sel=no, out=output);
+      Or16(a=output, b=allFalse, out=out);
+
+      /* Output is zero (zr) */
+      Reducer(in=output, out=reducedOutput);
+      And(a=reducedOutput, b=true, out=zero);
+      Not(in=zero, out=zr);
+
+      /* Output is negative (ng) */
+      IsNegative(in=output, out=ng);
 }
