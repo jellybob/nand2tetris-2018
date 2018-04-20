@@ -15,5 +15,12 @@ CHIP RAM64 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    /*
+    Dinner time, so some implementation notes:
+
+    - Made up of 8 banks of RAM8 chips.
+    - address[0..2] selects which bank.
+    - address[3..5] is routed to each RAM8 to select which register.
+    - Otherwise just like a RAM8.
+    */
 }
