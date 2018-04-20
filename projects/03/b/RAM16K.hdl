@@ -11,9 +11,46 @@
  */
 
 CHIP RAM16K {
-    IN in[16], load, address[14];
+    IN in[16], load, address[15];
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+    /* Send the load input to the selected address */
+    DMux8Way(
+      in=load,
+      sel=address[0..2],
+      a=loadOne,
+      b=loadTwo,
+      c=loadThree,
+      d=loadFour,
+      e=loadFive,
+      f=loadSix,
+      g=loadSeven,
+      h=loadEight
+    );
+
+    /* Send the selected address to the output */
+    Mux8Way16(
+      a=one,
+      b=two,
+      c=three,
+      d=four,
+      e=five,
+      f=six,
+      g=seven,
+      h=eight,
+      sel=address[0..2],
+      out=out
+    );
+
+    /* Memory registers */
+    RAM4K(in=in, load=loadOne, address=address[3..14], out=one);
+    RAM4K(in=in, load=loadTwo, address=address[3..14], out=two);
+    RAM4K(in=in, load=loadThree, address=address[3..14], out=three);
+    RAM4K(in=in, load=loadFour, address=address[3..14], out=four);
+    RAM4K(in=in, load=loadFive, address=address[3..14], out=five);
+    RAM4K(in=in, load=loadSix, address=address[3..14], out=six);
+    RAM4K(in=in, load=loadSeven, address=address[3..14], out=seven);
+    RAM4K(in=in, load=loadEight, address=address[3..14], out=eight);
 }
