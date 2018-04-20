@@ -1,0 +1,10 @@
+CHIP IsNegative {
+  IN
+    in[16]; /* 16-bit inputs */
+
+  OUT
+    out; /* True if all bits match */
+
+  PARTS:
+    And(a=in[15], b=true, out=out);
+}
