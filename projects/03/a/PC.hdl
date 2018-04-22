@@ -16,5 +16,22 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    Not(in=reset, out=notReset);
+    Not(in=inc, out=notInc);
+    And(a=notReset, b=inc, out=noResetNoInc);
+    Or(a=reset, b=inc, out=resetOrInc);
+    And(a=reset, b=notInc, out=resetNotInc);
+    And(a=notReset, b=inc, out=incNotReset);
+
+    ALU(x=nextAddress, zx=reset, nx=noResetNoInc, zy=true, ny=notReset, f=resetOrInc, no=incNotReset, out=aluResult);
+
+    And(a=load, b=notReset, out=loadIn);
+
+    Mux16(a=aluResult, b=in, sel=loadIn, out=inOrNextAddress);
+    Register(in=inOrNextAddress,
+             out=nextAddress,
+             load=true);
+
+    Fanout(in=true, out=allTrue);
+    And16(a=allTrue, b=nextAddress, out=out);
 }
