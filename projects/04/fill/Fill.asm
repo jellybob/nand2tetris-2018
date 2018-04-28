@@ -1,13 +1,13 @@
 // Address of last block of pixels.
 @24576
 D=A
-@MAX
+@R3
 M=D
 
 (RESET)
   @SCREEN
   D=A
-  @NEXT
+  @R1
   M=D
 
 (LOOP)
@@ -29,17 +29,17 @@ M=D
   D=A
 
   (FILL)
-  @NEXT
+  @R1
   A=M
   M=D
   // Set the value of @NEXT
   D=A+1
-  @NEXT
+  @R1
   M=D
 
   // Move to the next pixel, unless we've run
   // out of screen.
-  @MAX
+  @R3
   D=D-M
   @RESET
   D;JEQ
