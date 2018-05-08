@@ -1,4 +1,5 @@
 require "assembler/parser/a_instruction"
+require "assembler/parser/c_instruction"
 
 class Assembler
   class Parser
@@ -19,6 +20,14 @@ class Assembler
       case line
       when /^@(.*)/
         return AInstruction.new($1)
+      when /^((A|M|D|AD|AM|MD|AMD)=)?(0|1|D)$/
+        return CInstruction.new($2, $3, nil)
+      when /^\/\//
+        return nil
+      when /^$/
+        return nil
+      else
+        return line
       end
     end
   end
