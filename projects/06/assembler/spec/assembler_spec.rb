@@ -25,7 +25,7 @@ describe Assembler do
   end
 
   it "defaults to using Assembler::InstructionParser for parsing" do
-    @asm.parser.must_equal(Assembler::InstructionParser)
+    @asm.parser.must_equal(Assembler::Parser)
   end
 
   describe "parsing & assembling a program" do

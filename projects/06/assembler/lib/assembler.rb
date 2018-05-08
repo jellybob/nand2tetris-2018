@@ -1,17 +1,10 @@
+require "assembler/parser"
+
 class Assembler
-  class InstructionParser
-    def initialize(content)
-      @content = content
-    end
-
-    def parse
-    end
-  end
-
   attr_reader :source_file
   attr_reader :parser
 
-  def initialize(filename, parser = InstructionParser)
+  def initialize(filename, parser = Parser)
     @source_file = filename
     @parser = parser
   end
@@ -30,7 +23,7 @@ class Assembler
   end
 
   def assemble
-    output = parse
+    output = parse.compact
     File.open(target_file, "w") do |f|
       f.print(output.join("\n"))
       f.print("\n")
