@@ -7,10 +7,8 @@ class Assembler
     class InvalidAddressError < ParseError; end
 
     attr_reader :computations, :jumps
-    attr_reader :lines
 
-    def initialize(lines)
-      @lines = lines
+    def initialize
       @computations = operator_map(CInstruction::COMPUTATIONS)
       @jumps = operator_map(CInstruction::JUMPS)
     end
@@ -19,8 +17,8 @@ class Assembler
       m.keys.map { |k| Regexp.escape(k) }.join("|")
     end
 
-    def parse
-      @lines.map { |l| parse_line(l) }
+    def parse(source)
+      source.map { |l| parse_line(l) }
     end
 
     def parse_line(line)

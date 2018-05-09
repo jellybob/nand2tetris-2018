@@ -1,8 +1,12 @@
 require "assembler/parser"
 
 describe Assembler::Parser::AInstruction do
+  before do
+    @parser = Assembler::Parser.new
+  end
+
   def parse(instruction)
-    Assembler::Parser.new([]).parse_line(instruction)
+    @parser.parse_line(instruction)
   end
 
   describe "a valid A instruction" do

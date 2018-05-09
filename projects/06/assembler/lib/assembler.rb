@@ -1,12 +1,15 @@
 require "assembler/parser"
+require "assembler/symboliser"
 
 class Assembler
   attr_reader :source_file
   attr_reader :parser
+  attr_reader :symboliser
 
-  def initialize(filename, parser = Parser)
+  def initialize(filename, parser: Parser, symboliser: Symboliser)
     @source_file = filename
     @parser = parser
+    @symboliser = symboliser
   end
 
   def target_file
@@ -17,13 +20,20 @@ class Assembler
     @parser
   end
 
-  def parse
-    content = File.read(source_file).lines.map(&:strip)
-    parser.new(content).parse
+  def load_source
+    @source = File.read(source_file).lines.map(&:strip)
+  end
+
+  def symbolise(source)
+    symboliser.new.symbolise(source)
+  end
+
+  def parse(source)
+    parser.new.parse(source)
   end
 
   def assemble
-    output = parse.compact
+    output = parse(symbolise(load_source))
     File.open(target_file, "w") do |f|
       f.print(output.join("\n"))
       f.print("\n")

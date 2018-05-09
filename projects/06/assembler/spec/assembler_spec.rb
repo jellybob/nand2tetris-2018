@@ -2,12 +2,14 @@ require "assembler"
 
 describe Assembler do
   class TestParser
-    def initialize(file_contents)
-      @contents = file_contents
+    def parse(source)
+      source
     end
+  end
 
-    def parse
-      @contents
+  class TestSymboliser
+    def symbolise(source)
+      source.map { |l| "-- #{l}" }
     end
   end
 
@@ -30,23 +32,29 @@ describe Assembler do
 
   describe "parsing & assembling a program" do
     before do
-      @asm = Assembler.new(@filename, TestParser)
+      @asm = Assembler.new(@filename, parser: TestParser, symboliser: TestSymboliser)
     end
 
     it "supports custom parsers" do
       @asm.parser.must_equal(TestParser)
+      @asm.symboliser.must_equal(TestSymboliser)
     end
 
-    it "passes the file contents to the parser, returning the parsed lines" do
+    it "can pass content through a parser" do
       content = File.read(@filename).lines.map(&:strip)
-      @asm.parse.must_equal(content)
+      @asm.parse(content).must_equal(content)
     end
 
-    it "writes the parsed lines to the target file" do
+    it "can pass content through a symboliser" do
+      content = File.read(@filename).lines.map(&:strip)
+      @asm.symbolise(content).must_equal(content.map { |l| "-- #{l}" })
+    end
+
+    it "writes the parsed and symbolised lines to the target file" do
       FileUtils.remove("spec/fixtures/comment_only.hack", force: true)
 
       @asm.assemble
-      File.read("spec/fixtures/comment_only.hack").must_equal(File.read("spec/fixtures/comment_only.asm"))
+      File.read("spec/fixtures/comment_only.hack").must_equal(File.read("spec/fixtures/comment_only.asm").gsub(/^/, "-- "))
     end
   end
 end
