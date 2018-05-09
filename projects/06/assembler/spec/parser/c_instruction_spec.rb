@@ -48,21 +48,13 @@ describe Assembler::Parser::CInstruction do
   end
 
   describe "parsing the computation" do
-    it "suports 0" do
-      r = parse("0")
-      r.comp_as_binary.must_equal("101010")
-    end
-
-    it "supports 1" do
-      r = parse("1")
-      r.comp_as_binary.must_equal("111111")
-    end
-
-    it "supports -1"
-
-    it "supports D" do
-      r = parse("D")
-      r.comp_as_binary.must_equal("001100")
+    it "can map a command to a binary integer" do
+      parse("0").comp_as_binary.must_equal("0101010")
+      parse("1").comp_as_binary.must_equal("0111111")
+      parse("-1").comp_as_binary.must_equal("0111010")
+      parse("D|A").comp_as_binary.must_equal("0010101")
+      parse("M").comp_as_binary.must_equal("1110000")
+      parse("D|M").comp_as_binary.must_equal("1010101")
     end
   end
 end

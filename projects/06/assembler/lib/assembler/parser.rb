@@ -6,10 +6,15 @@ class Assembler
     class ParseError < StandardError; end
     class InvalidAddressError < ParseError; end
 
+    attr_reader :computations
     attr_reader :lines
 
     def initialize(lines)
       @lines = lines
+      @computations = Assembler::Parser::CInstruction::COMPUTATIONS.
+        keys.
+        map { |k| Regexp.escape(k) }.
+        join("|")
     end
 
     def parse
@@ -20,7 +25,7 @@ class Assembler
       case line
       when /^@(.*)/
         return AInstruction.new($1)
-      when /^((A|M|D|AD|AM|MD|AMD)=)?(0|1|D)$/
+      when /^((A?M?D?)=)?(#{computations})$/
         return CInstruction.new($2, $3, nil)
       when /^\/\//
         return nil
