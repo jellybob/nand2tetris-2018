@@ -57,4 +57,16 @@ describe Assembler::Parser::CInstruction do
       parse("D|M").comp_as_binary.must_equal("1010101")
     end
   end
+
+  describe "parsing a jump" do
+    it "can handle a null jump" do
+      parse("0").jump_as_binary.must_equal("000")
+    end
+
+    it "can map a jump to a binary integer" do
+      parse("0;JGT").jump_as_binary.must_equal("001")
+      parse("0;JLT").jump_as_binary.must_equal("100")
+      parse("0;JMP").jump_as_binary.must_equal("111")
+    end
+  end
 end

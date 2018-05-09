@@ -31,6 +31,16 @@ class Assembler
         "D|M" => 0b1010101,
       }.freeze
 
+      JUMPS = {
+        "JGT" => 0b001,
+        "JEQ" => 0b010,
+        "JGE" => 0b011,
+        "JLT" => 0b100,
+        "JNE" => 0b101,
+        "JLE" => 0b110,
+        "JMP" => 0b111,
+      }.freeze
+
       attr_reader :dest, :comp, :jump
 
       def initialize(dest, comp, jump)
@@ -56,7 +66,7 @@ class Assembler
       end
 
       def jump_as_binary
-        "000"
+        JUMPS.fetch(jump, 0).to_s(2).rjust(3, "0")
       end
 
       def bit_include(string, char)

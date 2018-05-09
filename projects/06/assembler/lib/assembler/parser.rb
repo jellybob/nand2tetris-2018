@@ -6,15 +6,17 @@ class Assembler
     class ParseError < StandardError; end
     class InvalidAddressError < ParseError; end
 
-    attr_reader :computations
+    attr_reader :computations, :jumps
     attr_reader :lines
 
     def initialize(lines)
       @lines = lines
-      @computations = Assembler::Parser::CInstruction::COMPUTATIONS.
-        keys.
-        map { |k| Regexp.escape(k) }.
-        join("|")
+      @computations = operator_map(CInstruction::COMPUTATIONS)
+      @jumps = operator_map(CInstruction::JUMPS)
+    end
+
+    def operator_map(m)
+      m.keys.map { |k| Regexp.escape(k) }.join("|")
     end
 
     def parse
@@ -25,8 +27,8 @@ class Assembler
       case line
       when /^@(.*)/
         return AInstruction.new($1)
-      when /^((A?M?D?)=)?(#{computations})$/
-        return CInstruction.new($2, $3, nil)
+      when /^((A?M?D?)=)?(#{computations})(;(#{jumps}))?$/
+        return CInstruction.new($2, $3, $5)
       when /^\/\//
         return nil
       when /^$/
