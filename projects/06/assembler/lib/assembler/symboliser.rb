@@ -34,19 +34,40 @@ class Assembler
     }.freeze
 
     attr_reader :symbols
-    attr_reader :next_free
+    attr_accessor :next_free
     attr_accessor :next_instruction
 
     def initialize
-      @symbols = DEFAULT_SYMBOLS.clone
+      @symbols = DEFAULT_SYMBOLS.dup
       @next_free = 0x010
       @next_instruction = 0
     end
 
     def symbolise(source)
-      source.each do |line|
-        node = parse_node(line)
+      nodes = source.map { |l| parse_node(l) }
+
+      nodes.each do |node|
+        case node[:type]
+        when :label
+          symbols[node[:symbol]] ||= self.next_instruction
+        when :address
+          symbol = node[:symbol]
+          unless symbols.key?(symbol)
+            symbols[symbol] = self.next_free
+            self.next_free += 1
+          end
+        end
+
         self.next_instruction += 1 if node[:increment]
+      end
+
+      nodes.map do |node|
+        if node[:type] == :address
+          symbol = node[:symbol]
+          node[:line].sub(symbol, symbols[symbol].to_s)
+        else
+          node[:line]
+        end
       end
     end
 
@@ -59,6 +80,7 @@ class Assembler
         type: node_type[0],
         symbol: node_type[1].match(line)[1],
         increment: node_type[0] == :address || node_type[0] == :instruction,
+        line: line,
       }
     end
   end
