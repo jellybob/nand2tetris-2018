@@ -35,9 +35,18 @@ describe Assembler::Symboliser do
     end
   end
 
-  it "resolves a label to an address" do
-    @symboliser.symbolise(["D=A", "(LOOP)", "A=M"])
-    @symboliser.symbols["LOOP"].must_equal(1)
+  describe "parsing a label" do
+    it "resolves a label to an address" do
+      @symboliser.symbolise(["D=A", "(LOOP)", "A=M"])
+      @symboliser.symbols["LOOP"].must_equal(1)
+    end
+
+    it "doesn't include the label in the output" do
+      @symboliser.symbolise(["D=A", "(LOOP)", "A=M"]).must_equal([
+        "D=A",
+        "A=M",
+      ])
+    end
   end
 
   it "finds the next empty space for an undefined address" do
@@ -54,6 +63,6 @@ describe Assembler::Symboliser do
 
   it "rewrites address symbols to addresses" do
     result = @symboliser.symbolise(["D=A", "(LOOP)", "A=M", "@LOOP"])
-    result[3].must_equal("@1")
+    result[2].must_equal("@1")
   end
 end

@@ -62,13 +62,15 @@ class Assembler
       end
 
       nodes.map do |node|
+        next if node[:skip]
+
         if node[:type] == :address
           symbol = node[:symbol]
           node[:line].sub(symbol, symbols[symbol].to_s)
         else
           node[:line]
         end
-      end
+      end.compact
     end
 
     def parse_node(line)
@@ -81,6 +83,7 @@ class Assembler
         symbol: node_type[1].match(line)[1],
         increment: node_type[0] == :address || node_type[0] == :instruction,
         line: line,
+        skip: node_type[0] == :label || node_type[0] == :comment
       }
     end
   end
