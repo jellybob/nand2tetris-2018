@@ -58,8 +58,12 @@ class Assembler
           end
         end
 
-        self.next_instruction += 1 if node[:increment]
+        node[:position] = self.next_instruction
+        self.next_instruction += 1 unless node[:skip]
       end
+
+      pp symbols
+      pp nodes
 
       nodes.map do |node|
         next if node[:skip]
@@ -81,9 +85,8 @@ class Assembler
       {
         type: node_type[0],
         symbol: node_type[1].match(line)[1],
-        increment: node_type[0] == :address || node_type[0] == :instruction,
         line: line,
-        skip: node_type[0] == :label || node_type[0] == :comment
+        skip: node_type[0] == :label || node_type[0] == :comment,
       }
     end
   end

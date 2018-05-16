@@ -54,7 +54,7 @@ describe Assembler do
       FileUtils.remove("spec/fixtures/comment_only.hack", force: true)
 
       @asm.assemble
-      File.read("spec/fixtures/comment_only.hack").must_equal(File.read("spec/fixtures/comment_only.asm").gsub(/^/, "-- "))
+      File.read("spec/fixtures/comment_only.hack").must_equal("--\n--\n--\n")
     end
   end
 end

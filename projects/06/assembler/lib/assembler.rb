@@ -21,7 +21,9 @@ class Assembler
   end
 
   def load_source
-    @source = File.read(source_file).lines.map(&:strip)
+    @source = File.read(source_file).lines.map do |l|
+      l.sub(/\/\/.*$/, "").strip
+    end.reject { |l| l.empty? }
   end
 
   def symbolise(source)
