@@ -1,0 +1,16 @@
+name: compiler
+version: "1.0"
+author: Jon Wood <jon@blankpad.net>
+about: Provides tools to compile software for the Hack platform
+args:
+subcommands:
+  - assemble:
+      about: Compiles Hack assembler to raw machine code
+      args:
+        - retain_comments:
+            short: c
+            help: Don't strip out comments from the source
+        - INPUT:
+            help: The file to compile
+            required: true
+            index: 1

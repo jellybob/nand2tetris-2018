@@ -1,0 +1,8 @@
+[package]
+name = "compiler"
+version = "0.1.0"
+authors = ["Jon Wood <jon@blankpad.net>"]
+
+[dependencies]
+log = "0.4"
+clap = { version = "2.31", features = ["yaml"] }
