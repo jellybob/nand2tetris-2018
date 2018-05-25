@@ -10,13 +10,11 @@ fn main() {
     let args = App::from_yaml(cli_config).get_matches();
 
     match args.subcommand_name() {
-        Some("assemble") => assemble(args),
+        Some("assemble") => assemble(args.subcommand_matches("assemble").unwrap()),
         _ => panic!("Invalid subcommand"),
     }
 }
 
-fn assemble(args: ArgMatches) {
-    if let Some(sub_args) = args.subcommand_matches("assemble") {
-        println!("Assembling {}", sub_args.value_of("INPUT").unwrap());
-    }
+fn assemble(args: &ArgMatches) {
+    println!("Assembling {}", args.value_of("INPUT").unwrap());
 }
